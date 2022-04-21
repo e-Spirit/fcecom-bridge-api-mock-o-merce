@@ -1,0 +1,29 @@
+{
+  "name": "firstspirit-connect-for-commerce-bridge-api",
+  "version": "1.1.0",
+  "description": "FirstSpirit Connect for Commerce - Bridge API ",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "npm ci",
+    "start": "node index.js",
+    "start:watch": "nodemon index.js",
+    "test": "jest --silent --resetMocks"
+  },
+  "keywords": [
+    "swagger"
+  ],
+  "license": "Apache-2.0",
+  "private": true,
+  "dependencies": {
+    "connect": "^3.2.0",
+    "js-yaml": "^3.3.0",
+    "oas3-tools": "^2.2.3",
+    "axios": "^0.24.0",
+    "dotenv": "^10.0.0"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.2.1"
+  }
+}
