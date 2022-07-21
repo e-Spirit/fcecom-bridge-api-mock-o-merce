@@ -5,23 +5,25 @@ const httpClient = require('../utils/http-client');
 const _limit = 30;
 
 const fetchContentPages = async ({ _page, contentIds, q, lang = process.env.DEFAULT_LANG }) => {
-  const searchParams = new URLSearchParams({ ...(_page && { _page, _limit }), ...(q && { q }) });
-  contentIds &&
-    contentIds.reduce((innerSearchParams, id) => {
-      innerSearchParams.append('id', id);
-      return innerSearchParams;
-    }, searchParams);
-  const { data = [], headers } = await httpClient.get(`contentpages?${searchParams}`);
-  const total = headers['x-total-count'] || 0;
-  const contentPages = data.map(({ id, [`name_${process.env.DEFAULT_LANG}`]: _label, [`name_${lang.toLowerCase()}`]: label = _label, url: extract }) => {
-    return { id, label, extract };
-  });
+    const searchParams = new URLSearchParams({ ...(_page && { _page, _limit }), ...(q && { q }) });
+    contentIds &&
+        contentIds.reduce((innerSearchParams, id) => {
+            innerSearchParams.append('id', id);
+            return innerSearchParams;
+        }, searchParams);
+    const { data = [], headers } = await httpClient.get(`contentpages?${searchParams}`);
+    const total = headers['x-total-count'] || 0;
+    const contentPages = data.map(
+        ({ id, [`name_${process.env.DEFAULT_LANG}`]: _label, [`name_${lang.toLowerCase()}`]: label = _label, url: extract }) => {
+            return { id, label, extract };
+        }
+    );
 
-  return { contentPages: contentPages, total, hasNext: _page && total > _page * _limit };
+    return { contentPages: contentPages, total, hasNext: _page && total > _page * _limit };
 };
 
 const emptyResolvingPromise = new Promise(function (resolve, reject) {
-  resolve();
+    resolve();
 });
 
 /**
@@ -33,7 +35,7 @@ const emptyResolvingPromise = new Promise(function (resolve, reject) {
  * no response value expected for this operation
  **/
 const contentPagesContentIdDelete = function (contentId, lang) {
-  return emptyResolvingPromise;
+    return emptyResolvingPromise;
 };
 
 /**
@@ -46,7 +48,7 @@ const contentPagesContentIdDelete = function (contentId, lang) {
  * no response value expected for this operation
  **/
 const contentPagesContentIdPut = function (body, lang, contentId) {
-  return emptyResolvingPromise;
+    return emptyResolvingPromise;
 };
 
 /**
@@ -58,10 +60,10 @@ const contentPagesContentIdPut = function (body, lang, contentId) {
  * returns List
  **/
 const contentPagesContentIdsGet = function (contentIds, lang) {
-  return fetchContentPages({
-    contentIds: contentIds,
-    lang: lang,
-  });
+    return fetchContentPages({
+        contentIds: contentIds,
+        lang: lang
+    });
 };
 
 /**
@@ -74,11 +76,11 @@ const contentPagesContentIdsGet = function (contentIds, lang) {
  * returns List
  **/
 const contentPagesGet = function (q, lang, page) {
-  return fetchContentPages({
-    q: q,
-    lang: lang,
-    _page: page,
-  });
+    return fetchContentPages({
+        q: q,
+        lang: lang,
+        _page: page
+    });
 };
 
 /**
@@ -90,7 +92,7 @@ const contentPagesGet = function (q, lang, page) {
  * no response value expected for this operation
  **/
 const contentPagesHead = function () {
-  return emptyResolvingPromise;
+    return emptyResolvingPromise;
 };
 
 /**
@@ -102,25 +104,25 @@ const contentPagesHead = function () {
  * returns IdProviding
  **/
 const contentPagesPost = function (body, lang) {
-  return new Promise(function (resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-      id: 'id',
-    };
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
+    return new Promise(function (resolve, reject) {
+        var examples = {};
+        examples['application/json'] = {
+            id: 'id'
+        };
+        if (Object.keys(examples).length > 0) {
+            resolve(examples[Object.keys(examples)[0]]);
+        } else {
+            resolve();
+        }
+    });
 };
 
 module.exports = {
-  fetchContentPages,
-  contentPagesContentIdDelete,
-  contentPagesContentIdPut,
-  contentPagesContentIdsGet,
-  contentPagesGet,
-  contentPagesHead,
-  contentPagesPost,
+    fetchContentPages,
+    contentPagesContentIdDelete,
+    contentPagesContentIdPut,
+    contentPagesContentIdsGet,
+    contentPagesGet,
+    contentPagesHead,
+    contentPagesPost
 };
