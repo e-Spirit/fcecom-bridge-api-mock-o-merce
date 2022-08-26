@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/e-Spirit/fcecom-bridge-api-mock-o-merce.git"
   },
-  "author": "e-Spirit GmbH",
+  "author": "Crownpeak Technology GmbH",
   "license": "Apache-2.0",
   "main": "index.js",
   "scripts": {
@@ -20,7 +20,7 @@
     "axios": "^0.24.0",
     "connect": "^3.2.0",
     "dotenv": "^10.0.0",
-    "fcecom-bridge-commons": "^1.1.1",
+    "fcecom-bridge-commons": "^1.1.2",
     "js-yaml": "^3.3.0"
   },
   "devDependencies": {
