@@ -9,7 +9,7 @@ jest.mock('../../src/service/CategoriesService.js');
 describe('ProductsService', () => {
     describe('fetchProducts', () => {
         it('fetches product data', async () => {
-            httpClient.get.mockResolvedValue({ data: data.fetchProducts.data, headers: data.fetchProducts.headers });
+            httpClient.get.mockResolvedValue({ data: data.fetchProducts.data, headers: data.fetchProducts.headers, status: 200 });
 
             categoriesService.getCategoryNames.mockResolvedValue(data.getCategoryNames.data);
 
@@ -32,7 +32,7 @@ describe('ProductsService', () => {
             expect(result.hasNext).toEqual(false);
         });
         it('fetches product data that match given Ids', async () => {
-            httpClient.get.mockResolvedValue({ data: data.filteredProducts.data, headers: data.filteredProducts.headers });
+            httpClient.get.mockResolvedValue({ data: data.filteredProducts.data, headers: data.filteredProducts.headers, status: 200 });
 
             categoriesService.getCategoryNames.mockResolvedValue(data.getCategoryNames.data);
 

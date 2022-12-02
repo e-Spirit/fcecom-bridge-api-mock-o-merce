@@ -7,7 +7,11 @@ jest.mock('../../src/utils/http-client');
 describe('CategoriesService', () => {
     describe('fetchCategories', () => {
         it('fetches category data', async () => {
-            httpClient.get.mockResolvedValue({ data: data.fetchCategories.data, headers: data.fetchCategories.headers });
+            httpClient.get.mockResolvedValue({
+                data: data.fetchCategories.data,
+                headers: data.fetchCategories.headers,
+                status: 200
+            });
 
             const body = {
                 _page: 1,
@@ -25,7 +29,11 @@ describe('CategoriesService', () => {
             expect(result.hasNext).toEqual(false);
         });
         it('fetches category data from categories that match the given ids', async () => {
-            httpClient.get.mockResolvedValue({ data: data.filteredCategories.data, headers: data.filteredCategories.headers });
+            httpClient.get.mockResolvedValue({
+                data: data.filteredCategories.data,
+                headers: data.filteredCategories.headers,
+                status: 200
+            });
             const testCategory = data.grandChildCategory;
 
             const body = {
@@ -43,7 +51,8 @@ describe('CategoriesService', () => {
         it('fetches category data starting from a specific node', async () => {
             httpClient.get.mockResolvedValue({
                 data: data.fetchCategoriesByParentId.data,
-                headers: data.fetchCategoriesByParentId.headers
+                headers: data.fetchCategoriesByParentId.headers,
+                status: 200
             });
 
             const body = {
@@ -61,6 +70,25 @@ describe('CategoriesService', () => {
             expect(result.categories.length).toEqual(data.fetchCategoriesByParentId.data.length);
             expect(result.total).toEqual(data.fetchCategoriesByParentId.data.length);
             expect(result.hasNext).toEqual(false);
+        });
+        it('throws an error when http call fails', async () => {
+            const errorResponseText = "error"
+            const errorResponseStatus = 404
+            const errorResponse = { data: errorResponseText, status: errorResponseStatus }
+            httpClient.get.mockResolvedValue(errorResponse);
+
+            const body = {
+                _page: 1,
+                parentId: 'replace-calm-attached',
+                lang: 'EN'
+            };
+
+            try {
+                service.fetchCategories(body);
+            }
+            catch (error) {
+                expect(errorResponse).toEqual(error)
+            }
         });
     });
     describe('buildCategoryTree', () => {
@@ -86,9 +114,9 @@ describe('CategoriesService', () => {
         });
     });
     describe('getCategoryNames', () => {
+        const testCategory = data.grandChildCategory;
         it('gets language-specific category names', async () => {
-            httpClient.get.mockResolvedValue({ data: data.filteredCategories.data });
-            const testCategory = data.grandChildCategory;
+            httpClient.get.mockResolvedValue({ data: data.filteredCategories.data, status: 200 });
 
             const resultEN = await service.getCategoryNames([testCategory.id, 'topic'], 'en');
             const resultDE = await service.getCategoryNames([testCategory.id, 'topic'], 'de');
@@ -98,8 +126,8 @@ describe('CategoriesService', () => {
         });
     });
     describe('flattenCategories', () => {
+        const categoryTree = service.buildCategoryTree(data.fetchCategories.data, 'en');
         it('flattens the tree to a flat array of categories', () => {
-            const categoryTree = service.buildCategoryTree(data.fetchCategories.data, 'en');
             httpClient.get.mockResolvedValue({ data: data.flattenCategories.data });
 
             const result = service.flattenCategories(categoryTree);

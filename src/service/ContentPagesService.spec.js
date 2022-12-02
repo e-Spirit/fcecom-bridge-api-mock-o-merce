@@ -7,7 +7,11 @@ jest.mock('../../src/utils/http-client');
 describe('ContentPagesService', () => {
     describe('fetchContents', () => {
         it('fetches content pages data', async () => {
-            httpClient.get.mockResolvedValue({ data: data.fetchContentPages.data, headers: data.fetchContentPages.headers });
+            httpClient.get.mockResolvedValue({
+                data: data.fetchContentPages.data,
+                headers: data.fetchContentPages.headers,
+                status: 200
+            });
 
             const body = {
                 _page: 1,
@@ -26,7 +30,11 @@ describe('ContentPagesService', () => {
             expect(result.hasNext).toEqual(false);
         });
         it('fetches content pages data that match given Ids', async () => {
-            httpClient.get.mockResolvedValue({ data: data.filteredContentPages.data, headers: data.filteredContentPages.headers });
+            httpClient.get.mockResolvedValue({
+                data: data.filteredContentPages.data,
+                headers: data.filteredContentPages.headers,
+                status: 200
+            });
 
             const body = {
                 contentIds: ['hello-world-2, hello-world-4'],
