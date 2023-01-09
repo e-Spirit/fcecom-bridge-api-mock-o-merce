@@ -1,7 +1,7 @@
 {
   "name": "fcecom-bridge-api-mock-o-merce",
   "description": "FirstSpirit Connect for Commerce - Mock-o-Merce Bridge ",
-  "version": "1.4.4",
+  "version": "1.6.0",
   "private": true,
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
     "axios": "^0.24.0",
     "connect": "^3.2.0",
     "dotenv": "^10.0.0",
-    "fcecom-bridge-commons": "^1.2.0",
+    "fcecom-bridge-commons": "^1.3.0",
     "js-yaml": "^3.3.0"
   },
   "devDependencies": {
