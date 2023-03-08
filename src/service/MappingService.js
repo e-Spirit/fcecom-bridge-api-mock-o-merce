@@ -1,8 +1,6 @@
 'use strict';
 
 require('dotenv').config();
-const httpClient = require('../utils/http-client');
-const { productsProductIdsGet } = require('./ProductsService');
 
 const url2id = async (urlWithLang = '') => {
     const [url, lang] = urlWithLang.split('?');

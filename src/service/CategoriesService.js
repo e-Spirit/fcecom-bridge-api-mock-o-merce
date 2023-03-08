@@ -1,6 +1,10 @@
 'use strict';
 
 require('dotenv').config();
+const logger = require('../utils/logger');
+
+const LOGGING_NAME = 'CategoriesService';
+
 const httpClient = require('../utils/http-client');
 
 const _limit = 30;
@@ -25,6 +29,9 @@ const fetchCategories = async ({ _page, categoryIds, parentId, lang }) => {
                 innerSearchParams.append('id', id);
                 return innerSearchParams;
             }, searchParams);
+
+        logger.logDebug(LOGGING_NAME, `Performing GET request to /categories with parameters ${searchParams}`);
+
         const { data = [], headers } = await httpClient.get(`categories?${searchParams}`);
         const total = headers['x-total-count'] || 0;
         const categories = data.map(({ id, [`name_${language}`]: label }) => {
@@ -88,6 +95,9 @@ const categoriesCategoryIdsGet = (categoryIds, lang) => {
 
 const categoryTreeGet = async function (parentId, lang) {
     const language = (lang && lang.toLowerCase()) || process.env.DEFAULT_LANG;
+
+    logger.logDebug(LOGGING_NAME, `Performing GET request to /categories`);
+
     const { data: categories = [] } = await httpClient.get(`/categories?`);
     return { categorytree: buildCategoryTree(categories, language, parentId) };
 };
@@ -104,6 +114,9 @@ const getCategoryNames = async (categoryIds, lang) => {
         innerSearchParams.append('id', id);
         return innerSearchParams;
     }, new URLSearchParams());
+
+    logger.logDebug(LOGGING_NAME, `Performing GET request to /categories with parameters ${searchParams}`);
+
     const { data = [] } = await httpClient.get(`/categories?${searchParams}`);
     return Object.fromEntries(data.map(({ id, [`name_${lang}`]: label }) => [id, label]));
 };

@@ -1,16 +1,22 @@
 'use strict';
 
 const httpClient = require('../utils/http-client');
+const logger = require('../utils/logger');
+
+const LOGGING_NAME = 'ContentService';
 
 const _limit = 30;
 
 const fetchContent = async ({ _page, contentIds, q, lang = process.env.DEFAULT_LANG }) => {
     const searchParams = new URLSearchParams({ ...(_page && { _page, _limit }), ...(q && { q }) });
     contentIds &&
-    contentIds.reduce((innerSearchParams, id) => {
-        innerSearchParams.append('id', id);
-        return innerSearchParams;
-    }, searchParams);
+        contentIds.reduce((innerSearchParams, id) => {
+            innerSearchParams.append('id', id);
+            return innerSearchParams;
+        }, searchParams);
+
+    logger.logDebug(LOGGING_NAME, `Performing GET request to /contentpages with parameters ${searchParams}`);
+
     const { data = [], headers } = await httpClient.get(`contentpages?${searchParams}`);
     const total = headers['x-total-count'] || 0;
     const content = data.map(
@@ -35,6 +41,7 @@ const emptyResolvingPromise = new Promise(function (resolve, reject) {
  * no response value expected for this operation
  **/
 const contentContentIdDelete = function (contentId, lang) {
+    logger.logError(LOGGING_NAME, `Endpoint not implemented`);
     return emptyResolvingPromise;
 };
 
@@ -48,6 +55,7 @@ const contentContentIdDelete = function (contentId, lang) {
  * no response value expected for this operation
  **/
 const contentContentIdPut = function (body, lang, contentId) {
+    logger.logError(LOGGING_NAME, `Endpoint not implemented`);
     return emptyResolvingPromise;
 };
 
@@ -104,6 +112,7 @@ const contentHead = function () {
  * returns IdProviding
  **/
 const contentPost = function (body, lang) {
+    logger.logError(LOGGING_NAME, `Endpoint not implemented`);
     return new Promise(function (resolve, reject) {
         var examples = {};
         examples['application/json'] = {

@@ -2,6 +2,9 @@
 
 const httpClient = require('../utils/http-client');
 const { getCategoryNames } = require('./CategoriesService');
+const logger = require('../utils/logger');
+
+const LOGGING_NAME = 'ProductsService';
 
 const _limit = 30;
 
@@ -16,6 +19,9 @@ const fetchProducts = async ({ _page, productIds, categoryId, q, lang = process.
             innerSearchParams.append('id', id);
             return innerSearchParams;
         }, searchParams);
+
+    logger.logDebug(LOGGING_NAME, `Performing GET request to /products with parameters ${searchParams}`);
+
     const { data = [], headers = {} } = await httpClient.get(`products?${searchParams}`);
     const total = headers['x-total-count'] || 0;
     const categoryIds = [...new Set(data.map(({ category_id }) => category_id))];
