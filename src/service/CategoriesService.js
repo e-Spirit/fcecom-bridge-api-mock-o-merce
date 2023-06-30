@@ -6,6 +6,7 @@ const logger = require('../utils/logger');
 const LOGGING_NAME = 'CategoriesService';
 
 const httpClient = require('../utils/http-client');
+const { ShopError } = require('fcecom-bridge-commons');
 
 const _limit = 30;
 
@@ -14,6 +15,10 @@ const fetchCategories = async ({ _page, categoryIds, parentId, lang }) => {
     const language = (lang && lang.toLowerCase()) || process.env.DEFAULT_LANG;
     if (parentId) {
         const { data = [] } = await httpClient.get(`categories`);
+        if (!Array.isArray(data)) {
+            logger.logError(LOGGING_NAME, `Failed to get category data for parentId ${parentId}, received`, data);
+            throw new ShopError('Failed to get category data');
+        }
         const categoryTree = buildCategoryTree(data, language, parentId);
         const categories = flattenCategories(categoryTree);
         const total = categories.length;
@@ -33,6 +38,10 @@ const fetchCategories = async ({ _page, categoryIds, parentId, lang }) => {
         logger.logDebug(LOGGING_NAME, `Performing GET request to /categories with parameters ${searchParams}`);
 
         const { data = [], headers } = await httpClient.get(`categories?${searchParams}`);
+        if (!Array.isArray(data)) {
+            logger.logError(LOGGING_NAME, `Failed to get category data, received`, data);
+            throw new ShopError('Failed to get category data');
+        }
         const total = headers['x-total-count'] || 0;
         const categories = data.map(({ id, [`name_${language}`]: label }) => {
             return { id, label };

@@ -1,6 +1,7 @@
 const httpClient = require('../utils/http-client');
 const data = require('./CategoriesService.spec.data');
 const service = require('./CategoriesService');
+const { ShopError } = require('fcecom-bridge-commons');
 
 jest.mock('../../src/utils/http-client');
 
@@ -72,9 +73,9 @@ describe('CategoriesService', () => {
             expect(result.hasNext).toEqual(false);
         });
         it('throws an error when http call fails', async () => {
-            const errorResponseText = "error"
-            const errorResponseStatus = 404
-            const errorResponse = { data: errorResponseText, status: errorResponseStatus }
+            const errorResponseText = 'error';
+            const errorResponseStatus = 404;
+            const errorResponse = { data: errorResponseText, status: errorResponseStatus };
             httpClient.get.mockResolvedValue(errorResponse);
 
             const body = {
@@ -83,12 +84,8 @@ describe('CategoriesService', () => {
                 lang: 'EN'
             };
 
-            try {
-                service.fetchCategories(body);
-            }
-            catch (error) {
-                expect(errorResponse).toEqual(error)
-            }
+            expect(async () => await service.fetchCategories(body)).rejects.toThrow(ShopError);
+            expect(async () => await service.fetchCategories(body)).rejects.toThrowError('Failed to get category data');
         });
     });
     describe('buildCategoryTree', () => {

@@ -18,7 +18,7 @@ For more information about the Mock-o-Merce demo store visit [the Mock-o-Merce r
 
 
 ## Prerequisites
-- Server running node 14 or later
+- Server running node 18 or later
 - Mock-o-Merce shop instance
 
 ## Getting Started
