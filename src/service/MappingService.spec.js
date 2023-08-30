@@ -2,7 +2,7 @@ const httpClient = require('../utils/http-client');
 const service = require('./MappingService');
 const products = require('./ProductsService.spec.data');
 const categories = require('./CategoriesService.spec.data');
-const contentPages = require('./ContentPagesService.spec.data');
+const contentPages = require('./ContentService.spec.data');
 
 jest.mock('../../src/utils/http-client');
 
