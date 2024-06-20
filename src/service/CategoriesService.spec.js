@@ -72,6 +72,54 @@ describe('CategoriesService', () => {
             expect(result.total).toEqual(data.fetchCategoriesByParentId.data.length);
             expect(result.hasNext).toEqual(false);
         });
+        it('fetches category data with a keyword', async () => {
+            httpClient.get.mockResolvedValue({
+                data: data.fetchCategories.data,
+                headers: data.fetchCategories.headers,
+                status: 200
+            });
+
+            const body = {
+                _page: 1,
+                keyword: 'st',
+                lang: 'EN'
+            };
+
+            const result = await service.fetchCategories(body);
+
+            const expectedCategoriesTotal = 3;
+
+            expect(result.categories.length).toEqual(3);
+            expect(result.categories[0].label).toEqual('Slide stems Touch');
+            expect(result.categories[1].label).toEqual('Last rain branch');
+            expect(result.categories[2].label).toEqual('Smallest');
+            expect(result.total).toEqual(expectedCategoriesTotal);
+            expect(result.hasNext).toEqual(false);
+        });
+        it('fetches category data starting from a specific node and with a keyword', async () => {
+            httpClient.get.mockResolvedValue({
+                data: data.fetchCategoriesByParentId.data,
+                headers: data.fetchCategoriesByParentId.headers,
+                status: 200
+            });
+
+            const body = {
+                _page: 1,
+                parentId: 'replace-calm-attached',
+                keyword: 'ly',
+                lang: 'EN'
+            };
+
+            const result = await service.fetchCategories(body); 
+            
+            const expectedCategoriesTotal = 2;
+
+            expect(result.categories.length).toEqual(2);
+            expect(result.categories[0].label).toEqual('Possibly Fair Deer');
+            expect(result.categories[1].label).toEqual('Carefully Correct Progress');
+            expect(result.total).toEqual(expectedCategoriesTotal);
+            expect(result.hasNext).toEqual(false);
+        });
         it('throws an error when http call fails', async () => {
             const errorResponseText = 'error';
             const errorResponseStatus = 404;
